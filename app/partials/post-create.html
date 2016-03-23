@@ -1,6 +1,6 @@
 
-Válasz erre:
-<div class="row" ng-show="parent !== null">
+<span ng-show="parent != null">Válasz erre:</span>
+<div class="row" ng-show="parent != null">
     <div class="col-md-2 col-sm-3 text-center">
         <a class="story-img"><img ng-src="images/authors/{{post.author}}.jpg" style="width:100px;height:100px" class="img-circle"></a>
         <i class="glyphicon glyphicon-user"></i> {{post.author}}<br/>
@@ -23,8 +23,8 @@ Válasz erre:
         </div>
     </div>
 </div>
+<hr class="postseparator" ng-show="parent != null"/>
 
-<hr class="postseparator"/>
 <div id="editor2" data-toggle="pen" data-placeholder="im a placeholder" class="pen" contenteditable="true">
     Szerző: <input type="text" class="form-control" placeholder="Szerző?" ng-model="author"/>
     Szöveg:

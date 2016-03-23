@@ -155,13 +155,15 @@ app.controller('PostListCtrl', ['$scope', '$routeParams', '$http',
                 angular.forEach($scope.posts, function (post) {
                     post.html = marked(post.text);
                 });
+            }).error(function (data) {
+                console.log('API call error');
             });
         };
         $scope.loadCurrentPage();
     }]);
 
-app.controller('PostCreateCtrl', ['$scope', '$routeParams', '$http', '$route',
-    function ($scope, $routeParams, $http, $route) {
+app.controller('PostCreateCtrl', ['$scope', '$routeParams', '$http', '$route', '$location',
+    function ($scope, $routeParams, $http, $route, $location) {
         $scope.parent = $routeParams.parent;
         $scope.text = "";
         $scope.author = "";
@@ -171,7 +173,8 @@ app.controller('PostCreateCtrl', ['$scope', '$routeParams', '$http', '$route',
             var url = 'http://localhost:8080/posts';
             $http.post(url, {
                 text: $scope.text,
-                author: $scope.author
+                author: $scope.author,
+                parentId: $scope.parent
             }).success(function (data) {
                 console.log('submit success');
                 $route.updateParams({
@@ -179,6 +182,9 @@ app.controller('PostCreateCtrl', ['$scope', '$routeParams', '$http', '$route',
                     text: null,
                     author: null
                 });
+                $location.path('/posts');
+            }).error(function (data) {
+                console.log('post submit error');
             });
         };
 
@@ -189,6 +195,8 @@ app.controller('PostCreateCtrl', ['$scope', '$routeParams', '$http', '$route',
             $http.get(url).success(function (data) {
                 $scope.post = data;
                 $scope.post.html = marked(data.text);
+            }).error(function (data) {
+                console.log('loadParent error');
             });
         };
         // try load parent if any
