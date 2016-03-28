@@ -7,7 +7,8 @@ var app = angular.module('flotty', [
     'flotty.version'
 ]);
 
-app.config(['$routeProvider', function ($routeProvider) {
+app.config(['$routeProvider',
+    function ($routeProvider) {
         $routeProvider.
                 when('/posts/create', {
                     templateUrl: 'partials/post-create.html',
@@ -20,6 +21,37 @@ app.config(['$routeProvider', function ($routeProvider) {
                 otherwise({
                     redirectTo: '/posts'
                 });
+    }]);
+
+app.factory('api', ['$http', '$location',
+    function ($http, $location) {
+
+//        var baseUrl;
+
+        var api = {
+            baseUrl: function () {
+//                return baseUrl;
+                return "http://localhost:8080";
+            },
+//            init: function () {
+//                $http.get("config.json")
+//                        .success(function (data) {
+//                            baseUrl = data.api.baseUrl;
+//                            console.log("API base URL is: " + baseUrl);
+//                            finished = true;
+//                        })
+//                        .error(function (data) {
+//                            console.log('GET config call error');
+//                            finished = true;
+//                        });
+//            }
+
+        };
+
+//        api.init();
+
+        return api;
+
     }]);
 
 app.controller('NavigationCtrl', ['$scope', '$route',
@@ -131,8 +163,8 @@ app.controller('NavigationCtrl', ['$scope', '$route',
         };
     }]);
 
-app.controller('PostListCtrl', ['$scope', '$routeParams', '$http',
-    function ($scope, $routeParams, $http) {
+app.controller('PostListCtrl', ['$scope', '$routeParams', '$http', 'api',
+    function ($scope, $routeParams, $http, api) {
         console.log('PostListCtrl created, page: ' + $routeParams.page + ', text: ' + $routeParams.text + ', author: ' + $routeParams.author);
 
         $scope.nav.currentPage = $routeParams.page ? new Number($routeParams.page) : 1;
@@ -141,7 +173,7 @@ app.controller('PostListCtrl', ['$scope', '$routeParams', '$http',
 
         $scope.loadCurrentPage = function () {
             console.log('loadCurrentPage ' + $scope.nav.currentPage);
-            var url = 'http://localhost:8080/posts?page=' + $scope.nav.currentPage;
+            var url = api.baseUrl() + '/posts?page=' + $scope.nav.currentPage;
             var s = $scope.nav.search;
             if (s.text) {
                 url = url + "&text=" + s.text;
@@ -150,27 +182,30 @@ app.controller('PostListCtrl', ['$scope', '$routeParams', '$http',
                 url = url + "&author=" + s.author;
             }
             console.log('calling REST API at: ' + url);
-            $http.get(url).success(function (data) {
-                $scope.posts = data;
-                angular.forEach($scope.posts, function (post) {
-                    post.html = marked(post.text);
-                });
-            }).error(function (data) {
-                console.log('API call error');
-            });
+            $http.get(url)
+                    .success(function (data) {
+                        $scope.posts = data;
+                        angular.forEach($scope.posts, function (post) {
+                            post.html = marked(post.text);
+                        });
+                    })
+                    .error(function (data) {
+                        console.log('GET posts API call error');
+                    });
         };
+
         $scope.loadCurrentPage();
     }]);
 
-app.controller('PostCreateCtrl', ['$scope', '$routeParams', '$http', '$route', '$location',
-    function ($scope, $routeParams, $http, $route, $location) {
+app.controller('PostCreateCtrl', ['$scope', '$routeParams', '$http', '$route', '$location', 'api',
+    function ($scope, $routeParams, $http, $route, $location, api) {
         $scope.parent = $routeParams.parent;
         $scope.text = "";
         $scope.author = "";
 
         $scope.submit = function () {
             console.log('submit: ' + $scope.text);
-            var url = 'http://localhost:8080/posts';
+            var url = api.baseUrl() + '/posts';
             $http.post(url, {
                 text: $scope.text,
                 author: $scope.author,
@@ -190,7 +225,7 @@ app.controller('PostCreateCtrl', ['$scope', '$routeParams', '$http', '$route', '
 
         $scope.loadParent = function () {
             console.log('loadParent ' + $scope.parent);
-            var url = 'http://localhost:8080/posts/' + $scope.parent;
+            var url = api.baseUrl() + '/posts/' + $scope.parent;
             console.log('calling REST API at: ' + url);
             $http.get(url).success(function (data) {
                 $scope.post = data;
