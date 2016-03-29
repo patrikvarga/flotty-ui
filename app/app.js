@@ -7,8 +7,8 @@ var app = angular.module('flotty', [
     'flotty.version'
 ]);
 
-app.config(['$routeProvider',
-    function ($routeProvider) {
+app.config(['$routeProvider', '$httpProvider',
+    function ($routeProvider, $httpProvider) {
         $routeProvider.
                 when('/posts/create', {
                     templateUrl: 'partials/post-create.html',
@@ -21,37 +21,23 @@ app.config(['$routeProvider',
                 otherwise({
                     redirectTo: '/posts'
                 });
+        $httpProvider.defaults.useXDomain = true;
+//        $httpProvider.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"};
+//        $httpProvider.defaults.headers.common['Authorization'] = 'hello';
     }]);
 
 app.factory('api', ['$http', '$location',
     function ($http, $location) {
-
-//        var baseUrl;
-
         var api = {
             baseUrl: function () {
-//                return baseUrl;
                 return "http://localhost:8080";
             },
-//            init: function () {
-//                $http.get("config.json")
-//                        .success(function (data) {
-//                            baseUrl = data.api.baseUrl;
-//                            console.log("API base URL is: " + baseUrl);
-//                            finished = true;
-//                        })
-//                        .error(function (data) {
-//                            console.log('GET config call error');
-//                            finished = true;
-//                        });
-//            }
+            authHeader: function () {
+                return 'Basic ' + window.btoa('flotty' + ':' + 'password');
+            }
 
         };
-
-//        api.init();
-
         return api;
-
     }]);
 
 app.controller('NavigationCtrl', ['$scope', '$route',
@@ -181,8 +167,8 @@ app.controller('PostListCtrl', ['$scope', '$routeParams', '$http', 'api',
             if (s.author) {
                 url = url + "&author=" + s.author;
             }
-            console.log('calling REST API at: ' + url);
-            $http.get(url)
+            console.log('loadCurrentPage calling REST API at: ' + url);
+            $http.get(url, {headers: {'Authorization': api.authHeader()}})
                     .success(function (data) {
                         $scope.posts = data;
                         angular.forEach($scope.posts, function (post) {
@@ -206,33 +192,39 @@ app.controller('PostCreateCtrl', ['$scope', '$routeParams', '$http', '$route', '
         $scope.submit = function () {
             console.log('submit: ' + $scope.text);
             var url = api.baseUrl() + '/posts';
-            $http.post(url, {
-                text: $scope.text,
-                author: $scope.author,
-                parentId: $scope.parent
-            }).success(function (data) {
-                console.log('submit success');
-                $route.updateParams({
-                    page: null,
-                    text: null,
-                    author: null
-                });
-                $location.path('/posts');
-            }).error(function (data) {
-                console.log('post submit error');
-            });
+            $http.post(url,
+                    {
+                        text: $scope.text,
+                        author: $scope.author,
+                        parentId: $scope.parent
+                    },
+                    {headers: {'Authorization': api.authHeader()}})
+                    .success(function (data) {
+                        console.log('submit success');
+                        $route.updateParams({
+                            page: null,
+                            text: null,
+                            author: null
+                        });
+                        $location.path('/posts');
+                    })
+                    .error(function (data) {
+                        console.log('post submit error');
+                    });
         };
 
         $scope.loadParent = function () {
             console.log('loadParent ' + $scope.parent);
             var url = api.baseUrl() + '/posts/' + $scope.parent;
             console.log('calling REST API at: ' + url);
-            $http.get(url).success(function (data) {
-                $scope.post = data;
-                $scope.post.html = marked(data.text);
-            }).error(function (data) {
-                console.log('loadParent error');
-            });
+            $http.get(url, {headers: {'Authorization': api.authHeader()}})
+                    .success(function (data) {
+                        $scope.post = data;
+                        $scope.post.html = marked(data.text);
+                    })
+                    .error(function (data) {
+                        console.log('loadParent error');
+                    });
         };
         // try load parent if any
         if ($scope.parent) {
