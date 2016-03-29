@@ -25,10 +25,11 @@
 </div>
 <hr class="postseparator" ng-show="parent != null"/>
 
-<div id="editor2" data-toggle="pen" data-placeholder="im a placeholder" class="pen" contenteditable="true">
-    Szerző: <input type="text" class="form-control" placeholder="Szerző?" ng-model="author"/>
-    Szöveg:
-    <textarea id="editor" placeholder="Hozzászólás írása ide... Lehet formázni is!" ng-model="text"></textarea>
+<div id="editorcontainer">
+    Szerző: <input type="text" class="form-control" placeholder="Szerző?" ng-model="author"/><br/>
+    Szöveg:<br/>
+    <small>(Lehet formázni is, ha kijelölsz szöveget.)</small><br/>
+    <div id="editor" ng-model="text" placeholder="xxx"></div>
 </div>
 <hr class="postseparator"/>
 
@@ -44,9 +45,3 @@
     </a>
 
 </div>
-
-<!--<script type="text/javascript">
-    var pen = window.pen = new Pen('#editor');
-    pen.focus();
-</script>-->
-

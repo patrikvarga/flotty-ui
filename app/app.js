@@ -26,10 +26,11 @@ app.config(['$routeProvider', '$httpProvider',
 //        $httpProvider.defaults.headers.common['Authorization'] = 'hello';
     }]);
 
-app.factory('api', ['$http', '$location',
-    function ($http, $location) {
+app.factory('api', [
+    function () {
         var api = {
             baseUrl: function () {
+//                return "https://blog.flotty.hu/api";
                 return "http://localhost:8080";
             },
             authHeader: function () {
@@ -209,7 +210,8 @@ app.controller('PostCreateCtrl', ['$scope', '$routeParams', '$http', '$route', '
                         $location.path('/posts');
                     })
                     .error(function (data) {
-                        console.log('post submit error');
+                        console.log('post submit error ' + data.code);
+                        console.log('post submit error ' + data.message);
                     });
         };
 
@@ -230,4 +232,24 @@ app.controller('PostCreateCtrl', ['$scope', '$routeParams', '$http', '$route', '
         if ($scope.parent) {
             $scope.loadParent();
         }
+
+        $scope.$on('$viewContentLoaded', function () {
+            // config
+            var options = {
+                editor: document.getElementById('editor'),
+                textarea: '<textarea id="editortext"  name="content" placeholder="Hozzászólás írása ide... Lehet formázni is!" ng-model="text"></textarea>',
+                list: [
+                    'insertimage', 'blockquote', 'h2', 'h3', 'p', 'code', 'insertorderedlist', 'insertunorderedlist', 'inserthorizontalrule',
+                    'indent', 'outdent', 'bold', 'italic', 'underline', 'createlink'
+                ]
+            };
+
+            // create editor
+            var pen = window.pen = new Pen(options);
+            console.log("pen: " + pen);
+            pen.focus();
+            console.log("pen: " + pen);
+            pen.rebuild();
+            console.log("pen: " + pen);
+        });
     }]);
