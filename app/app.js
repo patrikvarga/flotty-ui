@@ -22,8 +22,6 @@ app.config(['$routeProvider', '$httpProvider',
                     redirectTo: '/posts'
                 });
         $httpProvider.defaults.useXDomain = true;
-//        $httpProvider.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"};
-//        $httpProvider.defaults.headers.common['Authorization'] = 'hello';
     }]);
 
 app.factory('api', [
@@ -191,7 +189,9 @@ app.controller('PostCreateCtrl', ['$scope', '$routeParams', '$http', '$route', '
         $scope.author = "";
 
         $scope.submit = function () {
-            console.log('submit: ' + $scope.text);
+            // ugly hack because of pen vs angular
+            $scope.text = window.pen.toMd();
+            console.log('submitted by ' + $scope.author + ': ' + $scope.text);
             var url = api.baseUrl() + '/posts';
             $http.post(url,
                     {
@@ -246,10 +246,6 @@ app.controller('PostCreateCtrl', ['$scope', '$routeParams', '$http', '$route', '
 
             // create editor
             var pen = window.pen = new Pen(options);
-            console.log("pen: " + pen);
             pen.focus();
-            console.log("pen: " + pen);
-            pen.rebuild();
-            console.log("pen: " + pen);
         });
     }]);
