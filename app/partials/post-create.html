@@ -1,4 +1,3 @@
-
 <span ng-show="parent != null">Válasz erre:</span>
 <div class="row" ng-show="parent != null">
     <div class="col-md-2 col-sm-3 text-center">
@@ -23,25 +22,40 @@
         </div>
     </div>
 </div>
+
 <hr class="postseparator" ng-show="parent != null"/>
 
-<div id="editorcontainer">
-    Szerző: <input type="text" class="form-control" placeholder="Szerző?" ng-model="author"/><br/>
-    Szöveg:<br/>
-    <small>(Lehet formázni is, ha kijelölsz szöveget.)</small><br/>
-    <div id="editor" ng-model="text" placeholder="xxx"></div>
-</div>
-<hr class="postseparator"/>
+<form role="form" name="postForm" ng-submit="submit()">
 
-<div class="buttons">
+    <div id="editorcontainer">
+        <div class="form-group">
+            <label for="authorInput">Szerző:</label>
+            <input id="authorInput" type="text" class="form-control" placeholder="Szerző?" ng-model="author" 
+                   required
+                   ng-minlength="2" 
+                   ng-maxlength="20"/>
+        </div>
+        <div class="form-group">
+            <label for="editor">Szöveg:</label>
+            <small>(Lehet formázni is, ha kijelölsz szöveget.)</small><br/>
+            <div id="editor" ng-model="text" 
+                 required
+                 ng-required="true"
+                 ng-minlength="2" 
+                 ng-maxlength="4000"
+                 contenteditable="true"></div>
+        </div>
+    </div>
 
+    <hr class="postseparator"/>
 
-    <a href="#/posts" class="btn btn-primary pull-left">
-        <i class="glyphicon glyphicon-step-backward"></i> Vissza
-    </a>
+    <div class="buttons">
+        <a href="#/posts" class="btn btn-primary pull-left">
+            <i class="glyphicon glyphicon-step-backward"></i> Vissza
+        </a>
+        <button type="submit" class="btn btn-primary pull-right">
+            Küldés <i class="glyphicon glyphicon-play"></i>
+        </button>
+    </div>
 
-    <a class="btn btn-primary pull-right" ng-click="submit()">
-        Küldés <i class="glyphicon glyphicon-play"></i>
-    </a>
-
-</div>
+</form>

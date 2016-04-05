@@ -24,6 +24,29 @@ app.config(['$routeProvider', '$httpProvider',
         $httpProvider.defaults.useXDomain = true;
     }]);
 
+app.directive("contenteditable", function () {
+    console.log("init contenteditable");
+    return {
+        require: "ngModel",
+        link: function (scope, element, attrs, ngModel) {
+
+            console.log("init link");
+
+            function read() {
+                ngModel.$setViewValue(element.html());
+            }
+
+            ngModel.$render = function () {
+                element.html(ngModel.$viewValue || "");
+            };
+
+            element.bind("blur keyup change", function () {
+                scope.$apply(read);
+            });
+        }
+    };
+});
+
 app.factory('api', [
     function () {
         var api = {
@@ -188,13 +211,12 @@ app.controller('PostCreateCtrl', ['$scope', '$routeParams', '$http', '$route', '
         $scope.author = "";
 
         $scope.submit = function () {
-            // ugly hack because of pen vs angular
-            $scope.text = window.pen.toMd();
-            console.log('submitted by ' + $scope.author + ': ' + $scope.text);
+            console.log('submitting...');
+
             var url = api.baseUrl() + '/posts';
             $http.post(url,
                     {
-                        text: $scope.text,
+                        text: toMarkdown($scope.text),
                         author: $scope.author,
                         parentId: $scope.parent
                     },
