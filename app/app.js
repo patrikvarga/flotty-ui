@@ -209,8 +209,11 @@ app.controller('PostCreateCtrl', ['$scope', '$routeParams', '$http', '$route', '
                         $location.path('/posts');
                     })
                     .error(function (data) {
-                        console.log('post submit error ' + data.code);
-                        console.log('post submit error ' + data.message);
+                        if (data.errors) {
+                            console.log('post submit error: ' + data.errors);
+                        } else {
+                            console.log('post submit error: ' + data.code + " / " + data.message);
+                        }
                     });
         };
 
