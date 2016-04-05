@@ -1,4 +1,4 @@
-/* global angular */
+/* global angular, flotty */
 'use strict';
 
 var app = angular.module('flotty', [
@@ -28,8 +28,7 @@ app.factory('api', [
     function () {
         var api = {
             baseUrl: function () {
-//                return "https://blog.flotty.hu/api";
-                return "http://localhost:8080";
+                return flotty.apiBaseUrl;
             },
             authHeader: function () {
                 return 'Basic ' + window.btoa('flotty' + ':' + 'password');
