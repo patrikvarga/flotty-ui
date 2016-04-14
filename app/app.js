@@ -1,6 +1,18 @@
 /* global angular, flotty */
 'use strict';
 
+var Latinise = {};
+Latinise.latin_map = {"é": "e", "ä": "a", "á": "a", "ű": "u", "ő": "o", "ú": "u", "ö": "o", "ü": "u", "ó": "o", "í": "i", "É": "E", "Á": "A", "Ű": "U", "Ő": "O", "Ú": "U", "Ö": "O", "Ü": "U", "Ó": "O", "Í": "I"};
+String.prototype.latinise = function () {
+    return this.replace(/[^A-Za-z0-9\[\] ]/g, function (a) {
+        return Latinise.latin_map[a] || a;
+    });
+};
+String.prototype.latinize = String.prototype.latinise;
+String.prototype.isLatin = function () {
+    return this === this.latinise();
+};
+
 var app = angular.module('flotty', [
     'ngRoute',
     'ngSanitize',
@@ -194,6 +206,7 @@ app.controller('PostListCtrl', ['$scope', '$routeParams', '$http', 'api',
                         $scope.posts = data;
                         angular.forEach($scope.posts, function (post) {
                             post.html = marked(post.text);
+                            post.authorImage = post.author.toLowerCase().latinize();
                         });
                     })
                     .error(function (data) {
