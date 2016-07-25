@@ -1,6 +1,7 @@
-node_modules/
 app/bower_components/
 app/components/
 app/images/authors/
 app/images/flotty.jpg
+nbproject/private/
+node_modules/
 
