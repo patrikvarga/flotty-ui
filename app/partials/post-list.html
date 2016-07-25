@@ -1,0 +1,70 @@
+<div class="pager">
+    <a ng-href="{{nav.prevURL()}}" class="btn btn-primary pull-left btnPrev"
+       ng-if="nav.currentPage > 1">
+        <i class="glyphicon glyphicon-step-backward"></i> Előző oldal
+    </a>
+    <span>{{nav.currentPage}}. oldal</span>
+    <a ng-href="{{nav.nextURL()}}" class="btn btn-primary pull-right btnNext"
+       ng-if="posts.length === 20">
+        Következő oldal <i class="glyphicon glyphicon-step-forward"></i>
+    </a>
+</div>
+
+<p ng-if="nav.search.text || nav.search.author">
+    Eredmények ehhez:
+    <span ng-if="nav.search.text">szöveg: {{nav.search.text}}</span>
+    <span ng-if="nav.search.author">szerző: {{nav.search.author}}</span>
+</p>
+
+<hr/>
+
+<post ng-repeat="post in posts">
+    <div class="row">
+        <div class="col-md-2 col-sm-3 text-center">
+            <a class="story-img"><img ng-src="images/{{post.author}}.jpg" style="width:100px;height:100px" class="img-circle"></a>
+            <i class="glyphicon glyphicon-user"></i> {{post.author}}<br/>
+            #{{post.id}}
+        </div>
+        <div class="col-md-9 col-sm-9">
+            <div class="row">
+                <div class="col-xs-11">
+                    <div class="row">
+                        <p class="pull-left"><i class="glyphicon glyphicon-calendar"></i> {{post.date| date:'yyyy-MM-dd HH:mm:ss Z'}}</p>
+                        <p class="pull-right" ng-if="post.parentId">
+                            Erre válaszként:
+                            <a href="#/posts/{{post.parentId}}" title="Ugrás ide: #{{post.parentId}}, írta: {{post.parentAuthor}}">#{{post.parentId}}</a>
+                            {{post.parentAuthor}}
+                        </p>
+                    </div>
+                    <hr/>
+                    <div class="row thepost">
+                        <div ng-bind-html="post.html"></div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <p class="pull-right">
+                            <a ng-href="#/posts/create?parent={{post.id}}" title="Válaszolás erre: #{{post.id}}, írta: {{post.author}}">
+                                <i class="glyphicon glyphicon-comment"></i> Válasz
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="postseparator"/>
+</post>
+
+<div class="pager">
+    <a ng-href="{{nav.prevURL()}}" class="btn btn-primary pull-left btnPrev"
+       ng-click="nav.prevPage()"
+       ng-if="nav.currentPage > 1">
+        <i class="glyphicon glyphicon-step-backward"></i> Előző oldal
+    </a>
+    <span>{{nav.currentPage}}. oldal</span>
+    <a ng-href="{{nav.nextURL()}}" class="btn btn-primary pull-right btnNext"
+       ng-click="nav.nextPage()"
+       ng-if="posts.length === 20">
+        Következő oldal <i class="glyphicon glyphicon-step-forward"></i>
+    </a>
+</div>

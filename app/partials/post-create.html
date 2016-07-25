@@ -1,0 +1,52 @@
+
+Válasz erre:
+<div class="row" ng-show="parent !== null">
+    <div class="col-md-2 col-sm-3 text-center">
+        <a class="story-img"><img ng-src="images/{{post.author}}.jpg" style="width:100px;height:100px" class="img-circle"></a>
+        <i class="glyphicon glyphicon-user"></i> {{post.author}}<br/>
+        #{{post.id}}
+    </div>
+    <div class="col-md-9 col-sm-9">
+        <div class="row">
+            <div class="col-xs-11">
+                <div class="row">
+                    <p class="pull-left"><i class="glyphicon glyphicon-calendar"></i> {{post.date| date:'yyyy-MM-dd HH:mm:ss Z'}}</p>
+                    <p class="pull-right" ng-if="post.parentId">
+                        Erre válaszként: #{{post.parentId}} {{post.parentAuthor}}
+                    </p>
+                </div>
+                <hr/>
+                <div class="row thepost">
+                    <div ng-bind-html="post.html"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="postseparator"/>
+<div id="editor2" data-toggle="pen" data-placeholder="im a placeholder" class="pen" contenteditable="true">
+    Szerző: <input type="text" class="form-control" placeholder="Szerző?" ng-model="author"/>
+    Szöveg:
+    <textarea id="editor" placeholder="Hozzászólás írása ide... Lehet formázni is!" ng-model="text"></textarea>
+</div>
+<hr class="postseparator"/>
+
+<div class="buttons">
+
+
+    <a href="#/posts" class="btn btn-primary pull-left">
+        <i class="glyphicon glyphicon-step-backward"></i> Vissza
+    </a>
+
+    <a class="btn btn-primary pull-right" ng-click="submit()">
+        Küldés <i class="glyphicon glyphicon-play"></i>
+    </a>
+
+</div>
+
+<!--<script type="text/javascript">
+    var pen = window.pen = new Pen('#editor');
+    pen.focus();
+</script>-->
+
