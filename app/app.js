@@ -66,7 +66,7 @@ app.factory('api', [
                 return flotty.apiBaseUrl;
             },
             authHeader: function () {
-                return 'Basic ' + window.btoa('flotty' + ':' + 'password');
+                return 'Basic ' + window.btoa(flotty.apiUsername + ':' + flotty.apiPassword);
             }
 
         };
