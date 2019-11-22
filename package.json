@@ -15,9 +15,11 @@
         "karma-jasmine": "^0.3.5",
         "karma-junit-reporter": "^0.2.2",
         "protractor": "^2.1.0",
-        "shelljs": "^0.2.6"
+        "shelljs": "^0.2.6",
+        "uglify-js": "^3.6.9"
     },
     "scripts": {
+        "bundle": "mkdir -p app/dist && uglifyjs --compress --output app/dist/bundle.js -- app/bower_components/angular/angular.js app/bower_components/angular-route/angular-route.js app/bower_components/angular-sanitize/angular-sanitize.js app/bower_components/pen/src/pen.js app/bower_components/pen/src/markdown.js app/bower_components/marked/lib/marked.js app/bower_components/to-markdown/dist/to-markdown.js app/components/version/version.js app/components/version/version-directive.js app/components/version/interpolate-filter.js",
         "postinstall": "bower install",
         "prestart": "npm install",
         "start": "http-server -a localhost -p 8000 -c-1",
