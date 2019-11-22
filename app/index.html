@@ -2,32 +2,20 @@
 <html lang="hu" ng-app="flotty">
 
     <head>
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <meta charset="utf-8">
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <meta charset="utf-8" />
         <title>flotty!</title>
         <meta name="author" content="patrik" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link href="components/twitter-bootstrap/css/bootstrap.css" rel="stylesheet">
-        <link href="css/styles.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <link rel="stylesheet" href="components/twitter-bootstrap/css/bootstrap.css" />
         <link rel="stylesheet" href="components/pen/pen.css" />
+        <link rel="stylesheet" href="css/styles.css" />
     </head>
 
     <body ng-controller="NavigationCtrl">
 
-
         <header role="banner">
-
-            <div id="masthead">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12" style="text-align: center; padding: 10px;">
-                            <img src="images/flotty.jpg" width="900" height="90" alt="flotty!" style="margin-left: auto; margin-right: auto;"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <nav id="navbar" role="navigation" class="navbar navbar-default navbar-fixed-top">
+            <nav id="navbar" role="navigation" class="navbar navbar-default">
                 <ul class="nav navbar-left navbar-nav">
                     <li>
                         <a href="#/posts" title="Vissza a kezdőlapra">
@@ -49,27 +37,31 @@
                     </li>
                 </ul>
             </nav>
+            <div id="masthead">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12" style="text-align: center; padding: 10px;">
+                            <img src="images/flotty.jpg" width="900" height="90" alt="flotty!" style="margin-left: auto; margin-right: auto;"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </header>
-
 
         <div class="container">
             <div class="row">
-
                 <div class="col-md-12">
-
                     <div class="panel">
                         <div class="panel-body" ng-view>
                         </div>
                     </div>
-
-                </div><!--/col-12-->
+                </div>
             </div>
         </div>
 
-
         <hr/>
 
-        <script src="dist/flotty.bundle.js"></script>
+        <script src="dist/bundle.js"></script>
 
         <script src="config.js"></script>
         <script src="app.js"></script>
